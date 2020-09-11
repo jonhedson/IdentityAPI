@@ -6,6 +6,7 @@ using IdentityAPI.Data.Context;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -34,6 +35,8 @@ namespace IdentityAPI
                 options.UseSqlServer(Configuration.GetConnectionString("AppDbConnection"),
                 assembly => assembly.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName));
             });
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                         .AddEntityFrameworkStores<AppDbContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -47,6 +50,8 @@ namespace IdentityAPI
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
